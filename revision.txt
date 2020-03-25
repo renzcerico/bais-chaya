@@ -1,0 +1,18 @@
+admin end:
+
+5. Settings
+under settings the school should be able to Reset it for the coming new year. it should include:
+a. what year
+b. which accounts should be brought over to the new year (by clicking on check boxes near each name)
+when the check box is clicked it should drop down the list of students per account as well with checkboxes to bring over to the new system
+
+7. Archive
+ should be able to access all the accounts and students and forms split up by year
+8. admin should be able to edit the forms that are submitted
+
+reseting forms, archieving details. filtering details by year.
+
+tbl_custodian_archives
+	id
+	custodian_id
+	year
