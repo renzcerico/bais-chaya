@@ -34,7 +34,8 @@
                 </a>
                 <ul class="collapse list-unstyled" id="settings">
                     <li><a href="profile.php">Edit Profile</a></li>
-                    <li><a href="#">Administrator</a></li>
+                    <li><a href="administrators.php">All Admin</a></li>
+                    <li><a href="new_admin.php">New Admin</a></li>
                 </ul>
             </li>
             <li>

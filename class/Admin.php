@@ -156,5 +156,79 @@ class Admin {
 
         return 200;
     }
+
+    public function insertAdmin($data) {
+        $password = md5($data['password']);
+
+        $sql = "INSERT INTO tbl_admin
+                        SET first_name = :first_name,
+                            last_name = :last_name,
+                            middle_name = :middle_name,
+                            email_address = :email_address,
+                            password = :password,
+                            status = 'verified'";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':first_name', $data['firstname']);
+        $stmt->bindParam(':last_name', $data['lastname']);
+        $stmt->bindParam(':middle_name', $data['middlename']);
+        $stmt->bindParam(':email_address', $data['email']);
+        $stmt->bindParam(':password', $password);
+        $stmt->execute();
+        
+        return 200;
+    }
+
+    public function getAllAdmin() {
+        $sql = "SELECT id, 
+                       CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1)) as admin_name,
+                       email_address,
+                       created_at  
+                FROM tbl_admin
+               ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    public function getProfileById($id) {
+       
+        $sql = 'SELECT last_name, 
+                   first_name, 
+                   middle_name, 
+                   email_address 
+            FROM tbl_admin
+            WHERE id = :id';
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    public function adminUpdate($data) {
+
+        $sql = 'UPDATE tbl_admin SET last_name = :last_name,
+                        first_name = :first_name,
+                        middle_name = :middle_name,
+                        email_address = :email_address
+                    WHERE id = :id';
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $data['id']);
+        $stmt->bindParam(':last_name', $data['last_name']);
+        $stmt->bindParam(':first_name', $data['first_name']);
+        $stmt->bindParam(':middle_name', $data['middle_name']);
+        $stmt->bindParam(':email_address', $data['email_address']);
+        $stmt->execute();
+
+        return 200;
+    }
+
+
+    
 }
 ?>
