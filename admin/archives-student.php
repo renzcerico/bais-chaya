@@ -54,6 +54,7 @@ include 'script.php';
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
            <div class="card card_api">
               <div class="card-body pt-5 pl-3 pr-3 pb-5">
+                <button id="archiveStudent" class="mb-2 btn btn-dark font-weight-500 pl-5 pr-5">Add</button>
                 <table class="table table-bordered text-center table-sm" id="tbl_child">
                     <thead class="thead-dark">
                         <tr>
@@ -74,37 +75,42 @@ include 'script.php';
     </div>
   </div>
 
-  <!-- MODAL FOR CHILD DETAILS -->
-  <div class="modal child-modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Child Details 
-              <span class="small">
-              <a href="#" class="consent-app">(View Consent)</a>
-              </span>
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-        <div class="container-fluid">
-          <label>Last Name</label>
-          <input type="text" id="last_name" class="form-control mb-2" />
-          <label>First Name</label>
-          <input type="text" id="first_name" class="form-control mb-2" />
-          <label>Middle Name</label>
-          <input type="text" id="middle_name" class="form-control mb-2" />
-        </div>
-        <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">Close</button> -->
-          <button type="button" class="btn btn-danger" id="btnDelete">Delete</button>
-          <button type="button" class="btn btn-primary" id="btnUpdate">Save</button>
-        </div>
+  <!-- MODAL STUDENTS -->
+  <div class="modal fade modal-student" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Students</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <select id="schoolYear" class="form-control form-control-sm mb-2">
+          <?php
+            $dateNow = date('Y');
+            $lastYear = $dateNow - 1;
+          ?>
+          <option value="<?=$dateNow;?>"><?=$dateNow;?></option>
+          <option value="<?=$lastYear;?>"><?=$lastYear;?></option>
+        </select>
+        <table id="tblStudent" class="table table-bordered table-hover text-center table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm font-weight-500" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-sm font-weight-500" id="btnArchive">Archive</button>
       </div>
     </div>
   </div>
+</div>
 
   <?php
     include '../footer.php';
@@ -147,6 +153,69 @@ include 'script.php';
         
             window.location.href = 'custodian.php?&id=' + id +'&name=' + name;
         }
+
+        $(document).on('click', '#archiveStudent', () => {
+            childAll();
+            $('.modal-student').modal('show');
+        });
+
+        const childAll = () => {
+            const url = '../php/getAllChild.php';
+            $('#tblStudent>tbody tr').remove();
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: (res) => {
+                const data = JSON.parse(res);
+                for(let i = 0; i < data.length; i++) {
+                    set = '<tr p-id="'+data[i]['id']+'" class="modal-tr-student">'+
+                              '<td><input type="checkbox" class="float-left" />'+data[i]['child_name']+'</td>'+
+                          '</tr>';
+                    $('#tblStudent tbody').append(set);
+                }
+                }
+            });
+       };
+
+       $(document).on('click', '.modal-tr-student', (e) => {
+          const tr = e.currentTarget;
+          const isChecked = $(tr).find('input').attr('checked');
+
+          if(isChecked) {
+            $(tr).find('input').attr('checked', false);
+          } else {
+            $(tr).find('input').attr('checked', true);
+          }
+       });
+
+       const archive = () => {
+          const checkbox = $('input[type=checkbox]');
+          const year = $('#schoolYear').val();
+          const array = [];
+
+          checkbox.each(function() {
+            const isCheck = $(this).is(':checked');
+
+            if (isCheck) {
+                const id = $(this).closest('tr').attr('p-id');
+                array.push(id);
+            }
+          });
+
+          $.ajax({
+              url: '../php/archiveStudent.php',
+              method: 'POST',
+              data: { year: year, students: array },
+              success: (res) => {
+                  if (res == '200') {
+                    location.reload();
+                  }
+              }
+          });
+       };
+
+       $(document).on('click', '#btnArchive', () => archive());
 
 	});
 </script>

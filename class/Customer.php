@@ -665,6 +665,7 @@ class Customer {
 				FROM tbl_child c
 					LEFT JOIN tbl_parents p ON p.id = c.parent_id
 					RIGHT JOIN tbl_child_archives ca ON ca.child_id = c.id
+				ORDER BY ca.year DESC
 				";
 
 		$stmt = $this->conn->prepare($sql);

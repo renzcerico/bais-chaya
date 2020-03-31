@@ -8,7 +8,6 @@ when the check box is clicked it should drop down the list of students per accou
 
 7. Archive
  should be able to access all the accounts and students and forms split up by year
-8. admin should be able to edit the forms that are submitted
 
 reseting forms, archieving details. filtering details by year.
 

@@ -54,6 +54,7 @@ include 'script.php';
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
            <div class="card card_api">
               <div class="card-body pt-5 pl-3 pr-3 pb-5">
+                <button id="btnReset" class="mb-2 btn btn-dark font-weight-500 pl-5 pr-5">Reset</button>
                 <table class="table table-bordered text-center table-sm" id="tbl_child">
                     <thead class="thead-dark">
                         <tr>
@@ -148,6 +149,23 @@ include 'script.php';
         
             window.location.href = 'custodian.php?&id=' + id +'&name=' + name;
         }
+
+        $(document).on('click', '#btnReset', () => {
+            const confirms = prompt('Are you sure you want to reset all the application?', 'Enter Year');
+
+            if(confirms) {
+                const year = confirms;
+                
+                $.ajax({
+                    url: '../php/resetApplication.php',
+                    method: 'POST',
+                    data: { year: year },
+                    success: (res) => {
+                        console.log(res);
+                    }
+                });
+            }
+        });
 
 	});
 </script>

@@ -116,7 +116,7 @@ include 'script.php';
 $(() => {
 
     $("a[href='#settings']").click();
-    $("a[href='administrator.php']").addClass('toActive');
+    $("a[href='new_admin.php']").addClass('toActive');
 
     const addAdministrator = () => {
         const email = $('.email').val();

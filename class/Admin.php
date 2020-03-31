@@ -228,7 +228,53 @@ class Admin {
         return 200;
     }
 
+    public function archiveStudent($year, $students) {
+        $count = 0;
 
+        while ($count < count($students)) {
+            $student = $students[$count];
+
+            $sql = "INSERT INTO tbl_child_archives 
+                        SET child_id = :students, 
+                            year = :year";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':students', $student);
+            $stmt->bindParam(':year', $year);
+            $stmt->execute();
+
+            $count++;
+        }
+
+        return 200;
+    }
+
+    public function resetApplication($year) {
+        $sqlMeal = "SELECT id FROM tbl_meal WHERE id NOT IN (SELECT meal_id FROM tbl_meal_archives)";
+        $stmtMeal = $this->conn->prepare($sqlMeal);
+        $stmtMeal->execute();
+        $row = $stmtMeal;
+        $meal = $row->fetchAll(PDO::FETCH_ASSOC);
+        $count = 0;
+
+        while ( $count < $row->rowCount() ) {
+            $mealID = $meal[$count]['id'];
+
+            $sql = "INSERT INTO tbl_meal_archives 
+                        SET meal_id = :mealID,
+                            year = :year
+                ";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':mealID', $mealID);
+            $stmt->bindParam(':year', $year);
+            $stmt->execute();
+            
+            $count++;
+        }
+
+        return 200;
+    }
     
 }
 ?>
