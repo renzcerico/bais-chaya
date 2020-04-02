@@ -161,7 +161,7 @@ include 'script.php';
                     method: 'POST',
                     data: { year: year },
                     success: (res) => {
-                        console.log(res);
+                        location.reload();
                     }
                 });
             }
