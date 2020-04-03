@@ -527,7 +527,26 @@ class Customer {
 		return $stmt;
 	}
 
-	public function getAllParentsArchives() {
+	public function getAllParentsArchives($year) {
+
+		if ($year == 'ALL'){
+
+			$sql = "SELECT p.id, 
+					   CONCAT(p.last_name, ', ', p.first_name, ' ', LEFT(p.middle_name, 1)) as parent_name,
+			 		   p.email_address,
+					   p.status,
+					   m.id as meal_id,
+					   ma.year,
+					   p.created_at  
+				FROM tbl_parents p
+					LEFT JOIN tbl_meal m ON m.parent_id = p.id
+					RIGHT JOIN tbl_meal_archives ma ON ma.meal_id = m.id
+				ORDER BY ma.year DESC
+
+			   ";
+
+		}
+		else{
 		$sql = "SELECT p.id, 
 					   CONCAT(p.last_name, ', ', p.first_name, ' ', LEFT(p.middle_name, 1)) as parent_name,
 			 		   p.email_address,
@@ -538,9 +557,14 @@ class Customer {
 				FROM tbl_parents p
 					LEFT JOIN tbl_meal m ON m.parent_id = p.id
 					RIGHT JOIN tbl_meal_archives ma ON ma.meal_id = m.id
+				WHERE ma.year = :year
+				ORDER BY ma.year DESC
+
 			   ";
+		}
 
 		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(':year', $year);
 		$stmt->execute();
 
 		return $stmt;		
@@ -655,8 +679,9 @@ class Customer {
 		return $stmt;
 	}
 
-	public function getAllChildArchives() {
-		$sql = "SELECT c.id, 
+	public function getAllChildArchives($year) {
+		if ($year == 'ALL'){
+			$sql = "SELECT c.id, 
 						p.id parent_id,
 						CONCAT(c.last_name, ', ', c.first_name, ' ', LEFT(c.middle_name, 1), '.') as child_name,
 						CONCAT(p.last_name, ', ', p.first_name, ' ', LEFT(p.middle_name, 1), '.') as parent_name,
@@ -667,8 +692,24 @@ class Customer {
 					RIGHT JOIN tbl_child_archives ca ON ca.child_id = c.id
 				ORDER BY ca.year DESC
 				";
+		}
+		else{
+			$sql = "SELECT c.id, 
+						p.id parent_id,
+						CONCAT(c.last_name, ', ', c.first_name, ' ', LEFT(c.middle_name, 1), '.') as child_name,
+						CONCAT(p.last_name, ', ', p.first_name, ' ', LEFT(p.middle_name, 1), '.') as parent_name,
+						ca.year,
+						c.created_at  
+				FROM tbl_child c
+					LEFT JOIN tbl_parents p ON p.id = c.parent_id
+					RIGHT JOIN tbl_child_archives ca ON ca.child_id = c.id
+				WHERE ca.year = :year
+				ORDER BY ca.year DESC
+				";
+		}
 
 		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(':year', $year);
 		$stmt->execute();
 
 		return $stmt;

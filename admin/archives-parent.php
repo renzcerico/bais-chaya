@@ -1,6 +1,22 @@
 <?php
 include 'stylesheet.php';
 include 'script.php';
+
+
+include '../class/Database.php';
+require '../php/session1.php';
+include '../class/Archives.php';
+
+$db = new Database();
+$db = $db->connection();
+
+$getYear = new Archives($db);
+
+$getYear = $getYear->getYearParent();
+
+
+$getYear = $getYear->fetchAll(PDO::FETCH_ASSOC);
+?>
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +63,19 @@ include 'script.php';
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
           </div>
+          <div class="col-md-6 justify-content-center d-flex container-fluid mt-5 mb-3">
+          <select name="year" class="form-control" id="year">
+            <option value="ALL">ALL</option>
+            <?php
+              $x = 0;
+              while ($x < count($getYear)) {
+                ?>
+                    <option value="<?=$getYear[$x]['year'] ;?>"><?php echo $getYear[$x]['year']; ?></option>
+                <?php
+                $x++;
+              }
+            ?>
+        </select>
         </div>
       </div>
 
@@ -116,12 +145,15 @@ include 'script.php';
         $("a[href='#archives']").click();
         $("a[href='archives-parent.php']").addClass('toActive');
 
-        const child = () => {
+        const parent = () => {
+            $(".tr-parent").remove();
             const url = '../php/getAllParentArchives.php';
+            const year = $('#year').val();
 
             $.ajax({
                 url: url,
-                method: 'GET',
+                method: 'POSt',
+                data:{year:year},
                 success: (res) => {
                 const data = JSON.parse(res);
                 for(let i = 0; i < data.length; i++) {
@@ -137,7 +169,7 @@ include 'script.php';
             });
        };
 
-        child();
+        // child();
             // parents();
 
             $(document).on('click', '.tr-parent', (e) => parentClick(e));
@@ -166,6 +198,8 @@ include 'script.php';
                 });
             }
         });
+
+        $(document).on('click', '#year', () => parent());
 
 	});
 </script>

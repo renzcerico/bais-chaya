@@ -6,10 +6,10 @@ include '../class/Customer.php';
 $db = new Database();
 $db = $db->connection();
 
-$login = new Customer($db);
+$email = new Customer($db);
 
-$login = $login->email($_POST['email']);
+$email = $email->email($_POST['email']);
 
-echo $login;
+echo $email;
 
 ?>

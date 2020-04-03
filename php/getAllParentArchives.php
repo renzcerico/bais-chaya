@@ -8,7 +8,7 @@ $db = $db->connection();
 
 $parents = new Customer($db);
 
-$parents = $parents->getAllParentsArchives();
+$parents = $parents->getAllParentsArchives($_POST['year']);
 
 $parents = $parents->fetchAll(PDO::FETCH_ASSOC);
 
