@@ -153,7 +153,7 @@ $getYear = $getYear->fetchAll(PDO::FETCH_ASSOC);
             $.ajax({
                 url: url,
                 method: 'POSt',
-                data:{year:year},
+                data:{ year:year },
                 success: (res) => {
                 const data = JSON.parse(res);
                 for(let i = 0; i < data.length; i++) {
@@ -169,10 +169,11 @@ $getYear = $getYear->fetchAll(PDO::FETCH_ASSOC);
             });
        };
 
-        // child();
-            // parents();
+          // child();
+        parent()
+          // parents();
 
-            $(document).on('click', '.tr-parent', (e) => parentClick(e));
+        $(document).on('click', '.tr-parent', (e) => parentClick(e));
 
         const parentClick = (e) => {
             const id = e.currentTarget.getAttribute('p-id');
