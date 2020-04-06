@@ -661,6 +661,74 @@ class Customer {
 		return $array;
 	}
 
+	public function familyApplicationArchives($id) {
+		// $sql = "SELECT
+		// 		parents.id,
+		// 		CONCAT(parents.last_name, ', ', parents.first_name, ' ', LEFT(parents.middle_name, 1)) as parent_name,
+		// 		parents.email_address,
+		// 		adult.*,
+		// 		benefits.*,
+		// 		household.*,
+		// 		income.*
+		// 	FROM tbl_parents parents
+		// 	LEFT JOIN tbl_adult_signature adult ON adult.parent_id = parents.id
+		// 	LEFT JOIN tbl_benefits benefits ON benefits.parent_id = parents.id
+		// 	LEFT JOIN tbl_household household ON household.parent_id = parents.id
+		// 	LEFT JOIN tbl_total_income income ON income.parent_id = parents.id
+		// 	WHERE parents.id = :id";
+		
+		// $sqlParents = "SELECT parents.id,
+		// 					CONCAT(parents.last_name, ', ', parents.first_name, ' ', LEFT(parents.middle_name, 1)) as parent_name,
+		// 					parents.email_address
+		// 			  FROM tbl_parents parents";
+		// $stmtParents = $this->conn->prepare($sqlParents);
+		// $stmtParents->bindParam(':id', $id);
+		// $stmtParents->execute();
+		// $stmtParents = $stmtParents->fetchAll(PDO::FETCH_ASSOC);
+
+		// $sqlMeal = "SELECT id FROM tbl_meal WHERE parent_id = :id LIMIT 1";
+		// $stmtMeal = $this->conn->prepare($sqlMeal);
+		// $stmtMeal->bindParam(':id', $id);
+		// $stmtMeal->execute();
+		// $row = $stmtMeal->fetch(PDO::FETCH_ASSOC);
+		// $mealID = $row['id'];
+		$mealID = $id;
+
+		$sqlAdult = "SELECT * FROM tbl_adult_signature WHERE meal_id = :id";
+		$stmtAdult = $this->conn->prepare($sqlAdult);
+		$stmtAdult->bindParam(':id', $mealID);
+		$stmtAdult->execute();
+		$stmtAdult = $stmtAdult->fetch(PDO::FETCH_ASSOC);
+
+		$sqlBenefits = "SELECT * FROM tbl_benefits WHERE meal_id = :id";
+		$stmtBenefits = $this->conn->prepare($sqlBenefits);
+		$stmtBenefits->bindParam(':id', $mealID);
+		$stmtBenefits->execute();
+		$stmtBenefits = $stmtBenefits->fetchAll(PDO::FETCH_ASSOC);
+
+		$sqlHousehold = "SELECT * FROM tbl_household WHERE meal_id = :id";
+		$stmtHousehold = $this->conn->prepare($sqlHousehold);
+		$stmtHousehold->bindParam(':id', $mealID);
+		$stmtHousehold->execute();
+		$stmtHousehold = $stmtHousehold->fetchAll(PDO::FETCH_ASSOC);
+
+		$sqlIncome = "SELECT * FROM tbl_total_income WHERE meal_id = :id";
+		$stmtIncome = $this->conn->prepare($sqlIncome);
+		$stmtIncome->bindParam(':id', $mealID);
+		$stmtIncome->execute();
+		$stmtIncome = $stmtIncome->fetchAll(PDO::FETCH_ASSOC);
+
+		$array = [
+			// 'parents' => ($stmtParents),
+			'adult' => ($stmtAdult),
+			'benefits' => ($stmtBenefits),
+			'household' => ($stmtHousehold),
+			'income' => ($stmtIncome),
+		];
+
+		return $array;
+	}
+
 	public function getAllChild() {
 		$sql = "SELECT c.id, 
 						p.id parent_id,

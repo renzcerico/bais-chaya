@@ -157,7 +157,7 @@ $getYear = $getYear->fetchAll(PDO::FETCH_ASSOC);
                 success: (res) => {
                 const data = JSON.parse(res);
                 for(let i = 0; i < data.length; i++) {
-                    set = '<tr p-id="'+data[i]['id']+'" class="tr-parent">'+
+                    set = '<tr p-id="'+data[i]['id']+'" meal-id="'+data[i]['meal_id']+'" class="tr-parent">'+
                         '<td>'+data[i]['parent_name']+'</td>'+
                         '<td>'+data[i]['email_address']+'</td>'+
                         '<td>'+data[i]['status']+'</td>'+
@@ -176,12 +176,12 @@ $getYear = $getYear->fetchAll(PDO::FETCH_ASSOC);
         $(document).on('click', '.tr-parent', (e) => parentClick(e));
 
         const parentClick = (e) => {
-            const id = e.currentTarget.getAttribute('p-id');
+            const id = e.currentTarget.getAttribute('meal-id');
 
             const name = $(e.currentTarget).find('td:nth-child(1)').text().toUpperCase();
             const year = $(e.currentTarget).find('td:nth-child(4)').text();
-        
-            window.location.href = 'custodian-archives.php?&id=' + id +'&name=' + name +'&year=' + year;
+
+            window.location.href = 'application-archives.php?&id=' + id +'&status=verified' + '&year=' + year;
         }
 
         $(document).on('click', '#btnReset', () => {
