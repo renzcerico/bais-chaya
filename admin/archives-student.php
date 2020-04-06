@@ -174,16 +174,17 @@ $getYear = $getYear->fetchAll(PDO::FETCH_ASSOC);
        
 
         
-            // parents();
+      child();
 
-            $(document).on('click', '.tr-parent', (e) => parentClick(e));
+      $(document).on('click', '.tr-parent', (e) => parentClick(e));
 
         const parentClick = (e) => {
             const id = e.currentTarget.getAttribute('p-id');
 
             const name = $(e.currentTarget).find('td:nth-child(1)').text().toUpperCase();
+            const year = $(e.currentTarget).find('td:nth-child(3)').text();
         
-            window.location.href = 'custodian.php?&id=' + id +'&name=' + name;
+            window.location.href = 'custodian-archives.php?&id=' + id +'&name=' + name +'&year=' + year;
         }
 
         $(document).on('click', '#archiveStudent', () => {
