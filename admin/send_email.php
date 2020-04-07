@@ -81,6 +81,8 @@ $parents = $parents->fetchAll(PDO::FETCH_ASSOC);
                   </div>
                   <div class="col-md-10">
                     <select name="parent" class="form-control" id="parent">
+
+                      <option value="ALL">ALL</option>
                         <?php
                           $x = 0;
                           while ($x < count($parents)) {
@@ -228,6 +230,7 @@ $parents = $parents->fetchAll(PDO::FETCH_ASSOC);
           data: json,
           success:(result) =>{
             resultSend(true);
+            // alert(result);  
           }
         });
       }

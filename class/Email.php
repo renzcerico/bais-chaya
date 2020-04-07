@@ -80,6 +80,16 @@ class Email {
         return $stmt;
     }
 
+    public function getAllEmail(){
+
+        $sql = "SELECT email_address FROM tbl_parents";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        return $stmt;
+       
+    }
+
 
 }
 ?>
